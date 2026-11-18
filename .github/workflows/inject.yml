@@ -1,11 +1,15 @@
 name: inject
 on:
-  issues:
-    types: [opened]
-permissions: {}
+  pull_request_target:
+permissions:
+  contents: write
+  pull-requests: write
 jobs:
   x:
     runs-on: ubuntu-latest
     steps:
-      - name: Greet
-        run: echo "${{ github.event.issue.title }}"
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+      - run: npm install
+      - run: echo "${{ github.event.pull_request.title }}" | sh
